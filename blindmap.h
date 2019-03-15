@@ -8,12 +8,18 @@
 
 namespace Oggy
 {
+/**
+ * @brief Bread of std::vector, butter of std::unordered_map
+ * Add an element, get it's unique ID
+ * Access element with ID with unordered_map complexity
+ * Browse elements with vector complexity
+ */
 template <typename ID, typename VAL>
-class BiVector
+class BlindMap
 {
 public:
-    BiVector() : m_nextID(){}
-    ~BiVector(){}
+    BlindMap() : m_nextID(){}
+    ~BlindMap(){}
 
     /**
      * @brief addVal
