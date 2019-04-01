@@ -29,7 +29,7 @@ public:
     /**
      * @brief addVal
      * @param val
-     * @return id of the val
+     * @return ID of the val
      * O(n) complexity
      */
     ID addVal(VAL val)
@@ -43,8 +43,8 @@ public:
 
     /**
      * @brief removeVal
-     * @param id of the value to remove
-     * @return has effectively removed
+     * @param ID of the value to remove
+     * @return Removed value
      * O(n) complexity
      */
     VAL removeVal(ID id)
