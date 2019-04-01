@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <list>
 #include <iterator>
+#include <stdexcept>
 
 namespace Oggy
 {
@@ -46,16 +47,16 @@ public:
      * @return has effectively removed
      * O(n) complexity
      */
-    bool removeVal(ID id)
+    VAL removeVal(ID id)
     {
         const VAL* valptr = m_umap.find(id)->second;
         for (auto it(m_valist.begin()); it != m_valist.end(); ++it){
             if (&(*it) == valptr){
                 m_valist.erase(it);
-                return true;
+                return *it;
             }
         }
-        return false;
+        throw std::invalid_argument("given ID to remove does not exist !");
     }
     
     using miterator = typename std::unordered_map<ID, const VAL*>::iterator;
