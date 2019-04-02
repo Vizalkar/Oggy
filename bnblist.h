@@ -29,7 +29,7 @@ public:
     /**
      * @brief addVal
      * @param val
-     * @return ID of the val
+     * @return id of the val
      * O(n) complexity
      */
     ID addVal(VAL val)
@@ -43,8 +43,8 @@ public:
 
     /**
      * @brief removeVal
-     * @param ID of the value to remove
-     * @return Removed value
+     * @param id of the value to remove
+     * @return has effectively removed
      * O(n) complexity
      */
     VAL removeVal(ID id)
@@ -83,6 +83,11 @@ public:
     inline viterator rend() noexcept { return m_valist.rend(); }
     inline vconst_iterator rend() const noexcept { return m_valist.rend(); }
     inline vconst_iterator crend() const noexcept { return m_valist.crend(); }
+    
+    template< class Compare >
+    inline void sort( Compare comp ) { m_valist.sort(comp); }
+    
+    inline void sort() { m_valist.sort(); }
 
 private:
     ID m_nextID;
