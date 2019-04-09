@@ -1,5 +1,5 @@
-#ifndef __BNBLIST__
-#define __BNBLIST__
+#ifndef __OPAQUELIST__
+#define __OPAQUELIST__
 
 #include <utility>
 #include <unordered_map>
@@ -18,13 +18,13 @@ namespace Oggy
  * You cannot put more elements than the ID type allows (obviously)
  */
 template <typename ID, typename VAL>
-class BnBList
+class OpaqueList
 {
 private:
     void incrementNextID();
 public:
-    BnBList() : m_nextID(){}
-    ~BnBList(){}
+    OpaqueList() : m_nextID(){}
+    ~OpaqueList(){}
 
     /**
      * @brief addVal
@@ -100,7 +100,7 @@ private:
 };
 
 template <typename ID, typename VAL>
-void BnBList<ID,VAL>::incrementNextID()
+void OpaqueList<ID,VAL>::incrementNextID()
 {
     ID ref(m_nextID), candidate(m_nextID);
     while(++candidate != ref){
@@ -113,4 +113,4 @@ void BnBList<ID,VAL>::incrementNextID()
 
 } // Oggy
 
-#endif //__BNBLIST__
+#endif //__OPAQUELIST__
