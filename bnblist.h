@@ -68,6 +68,8 @@ public:
     inline miterator find (const ID& id) { return &m_umap.find(id); }
     inline mconst_iterator find (const ID& id) const { return &m_umap.find(id); }
     
+    inline VAL* const operator[](const ID& id) { return m_umap[id]; }
+    
     inline unsigned int count (const ID& id) const { return m_umap.count(id); }
 
     inline viterator begin() noexcept { return m_valist.begin(); }
@@ -93,7 +95,7 @@ public:
 
 private:
     ID m_nextID;
-    std::unordered_map<ID, const VAL*> m_umap;
+    std::unordered_map<ID, VAL* const> m_umap;
     std::list<VAL> m_valist;
 };
 
