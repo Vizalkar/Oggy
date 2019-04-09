@@ -59,16 +59,14 @@ public:
         throw std::invalid_argument("given ID to remove does not exist !");
     }
     
-    using miterator = typename std::unordered_map<ID, const VAL*>::iterator;
-    using mconst_iterator = typename std::unordered_map<ID, const VAL*>::const_iterator;
+    using miterator = typename std::unordered_map<ID, VAL* const>::iterator;
+    using mconst_iterator = typename std::unordered_map<ID, VAL* const>::const_iterator;
 
     using viterator = typename std::list<VAL>::iterator;
     using vconst_iterator = typename std::list<VAL>::const_iterator;
 
-    inline miterator find (const ID& id) { return &m_umap.find(id); }
-    inline mconst_iterator find (const ID& id) const { return &m_umap.find(id); }
-    
-    inline VAL* const operator[](const ID& id) { return m_umap[id]; }
+    inline miterator find (const ID& id) { return m_umap.find(id); }
+    inline mconst_iterator find (const ID& id) const { return m_umap.find(id); }
     
     inline unsigned int count (const ID& id) const { return m_umap.count(id); }
 
