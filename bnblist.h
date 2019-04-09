@@ -68,7 +68,7 @@ public:
     inline miterator find (const ID& id) { return &m_umap.find(id); }
     inline mconst_iterator find (const ID& id) const { return &m_umap.find(id); }
     
-    inline size_type count (const ID& id) const { return m_umap.count(id); }
+    inline unsigned int count (const ID& id) const { return m_umap.count(id); }
 
     inline viterator begin() noexcept { return m_valist.begin(); }
     inline vconst_iterator begin() const noexcept { return m_valist.begin(); }
