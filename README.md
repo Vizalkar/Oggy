@@ -2,7 +2,7 @@
 Handy utilities
 
 ## Opaque List
-```
+```c++
 // Manage a collection of objects with opaque unique ids 
 int main()
 {
