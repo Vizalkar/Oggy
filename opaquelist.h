@@ -29,7 +29,7 @@ public:
     /**
      * @brief addVal
      * @param val
-     * @return id of the val
+     * @return id of the newly added value
      * O(n) complexity
      */
     ID addVal(VAL val)
@@ -37,6 +37,7 @@ public:
         ID id(m_nextID);
         m_valist.push_back(val);
         m_umap.emplace(std::make_pair(id, &m_valist.back()));
+        m_ids.push_back(id);
         incrementNextID();
         return id;
     }
@@ -44,12 +45,18 @@ public:
     /**
      * @brief removeVal
      * @param id of the value to remove
-     * @return has effectively removed
+     * @return removed value
      * O(n) complexity
      */
     VAL removeVal(ID id)
     {
         const VAL* valptr = m_umap.find(id)->second;
+        for (auto it(m_ids.begin()); it != m_ids.end(); ++it){
+            if (*it == id){
+                m_ids.erase(it);
+                break;
+            }
+        }
         for (auto it(m_valist.begin()); it != m_valist.end(); ++it){
             if (&(*it) == valptr){
                 m_valist.erase(it);
@@ -90,11 +97,15 @@ public:
     inline void sort( Compare comp ) { m_valist.sort(comp); }
     
     inline void sort() { m_valist.sort(); }
+    
+    inline const std::vector<ID>& getIDVector() const { return m_ids; }
+    inline unsigned int size() const { return m_ids.size(); }
 
 private:
     ID m_nextID;
     std::unordered_map<ID, VAL* const> m_umap;
     std::list<VAL> m_valist;
+    std::vector<ID> m_ids;
 };
 
 template <typename ID, typename VAL>
