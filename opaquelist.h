@@ -6,6 +6,7 @@
 #include <list>
 #include <iterator>
 #include <stdexcept>
+#include <type_traits>
 
 namespace Oggy
 {
@@ -45,10 +46,10 @@ public:
     /**
      * @brief removeVal
      * @param id of the value to remove
-     * @return removed value
      * O(n) complexity
+     * Frees memory if objects are pointers
      */
-    VAL removeVal(ID id)
+    void removeVal(ID id)
     {
         const VAL* valptr = m_umap.find(id)->second;
         for (auto it(m_ids.begin()); it != m_ids.end(); ++it){
@@ -60,7 +61,9 @@ public:
         for (auto it(m_valist.begin()); it != m_valist.end(); ++it){
             if (&(*it) == valptr){
                 m_valist.erase(it);
-                return *it;
+                if (std::is_pointer(*it)){
+                    delete *it;
+                }
             }
         }
         throw std::invalid_argument("given ID to remove does not exist !");
