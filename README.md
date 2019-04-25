@@ -34,7 +34,7 @@ int main()
     // Remove objects with given ID
     // Objects are returned so you can delete them if it was pointers
     for (auto it(ids.begin() + 10); it < ids.end() -10 ; ++it){
-        olist.removeVal(*it);
+        delete olist.removeVal(*it);
     }
 
     for (const auto& i : olist){
