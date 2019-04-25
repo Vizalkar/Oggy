@@ -6,6 +6,7 @@
 #include <list>
 #include <iterator>
 #include <stdexcept>
+#include <vector>
 
 namespace Oggy
 {
