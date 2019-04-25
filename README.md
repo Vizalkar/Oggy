@@ -15,7 +15,7 @@ int main()
     
     // Add objects and get their ID so you can refer to that object from afar
     int id = olist.addVal(new int(50));
-    std::cout << olist.find(id)->second << std::endl;
+    std::cout << *olist.at(id) << std::endl;
     
     for (int i(51); i<100; ++i){
         olist.addVal(new int(i));
