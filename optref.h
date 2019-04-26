@@ -1,3 +1,5 @@
+#include <optional>
+
 namespace Oggy
 {
   /**@brief Optionnal reference implementation taken from https://vector-of-bool.github.io/2018/02/27/opt-ref.html */
