@@ -101,6 +101,7 @@ public:
     
     inline const std::vector<ID>& getIDVector() const { return m_ids; }
     inline unsigned int size() const { return m_ids.size(); }
+    inline bool has(ID id) const { return m_umap.count(id); }
 
 private:
     ID m_nextID;
