@@ -29,6 +29,14 @@ public:
     ~OpaqueList(){}
 
     /**
+     * @return The ID value that represent a non bound object
+     */
+    static inline ID nullID()
+    {
+    	return ID(-1);
+    }
+
+    /**
      * @brief addVal
      * @param val
      * @return id of the newly added value
@@ -114,11 +122,13 @@ template <typename ID, typename VAL>
 void OpaqueList<ID,VAL>::incrementNextID()
 {
     ID ref(m_nextID), candidate(m_nextID);
-    while(++candidate != ref){
+    ++candidate;
+    while(candidate != ref && candidate != nullID()){
         if (m_umap.count(candidate) == 0){
             m_nextID = candidate;
             break;
         }
+        ++candidate;
     }
 }
 
