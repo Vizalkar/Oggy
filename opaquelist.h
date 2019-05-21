@@ -25,7 +25,7 @@ class OpaqueList
 private:
     void incrementNextID();
 public:
-    OpaqueList() : m_nextID(){}
+    OpaqueList() : m_nextID(nullID()+1){}
     ~OpaqueList(){}
 
     /**
@@ -33,7 +33,7 @@ public:
      */
     static inline ID nullID()
     {
-    	return ID(-1);
+    	return ID();
     }
 
     /**
