@@ -64,6 +64,7 @@ public:
         for (auto it(m_ids.begin()); it != m_ids.end(); ++it){
             if (*it == id){
                 m_ids.erase(it);
+                m_umap.erase(id);
                 break;
             }
         }
