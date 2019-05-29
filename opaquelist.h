@@ -70,8 +70,9 @@ public:
         }
         for (auto it(m_valist.begin()); it != m_valist.end(); ++it){
             if (&(*it) == valptr){
+                auto ret(*it);
                 m_valist.erase(it);
-                return *it;
+                return ret;
             }
         }
         throw std::invalid_argument("given ID to remove does not exist !");
