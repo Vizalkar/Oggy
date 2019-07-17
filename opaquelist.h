@@ -77,6 +77,24 @@ public:
         }
         throw std::invalid_argument("given ID to remove does not exist !");
     }
+
+    /**
+     * @brief Moves value at position pos1 to position pos2 in the list. 
+     * The list can then be iterated in the new order.
+     */
+    void moveVal(unsigned int pos1, unsigned int pos2)
+    {
+	    assert(pos1 < m_valist.size() && pos2 < m_valist.size());
+	    auto it1(m_valist.begin());
+	    auto it2(m_valist.begin());
+	    unsigned int i(0);
+	    for (; it1 != m_valist.end() && i < pos1; ++it1, ++i){}
+	    i = 0;
+	    for (; it2 != m_valist.end() && i < pos2; ++it2, ++i){}
+	    if (pos1 < pos2) m_valist.insert(++it2, *it1);
+            else m_valist.insert(it2, *it1);
+	    m_valist.erase(it1);
+    }
     
     using mconst_iterator = typename std::unordered_map<ID, VAL* const>::const_iterator;
 
