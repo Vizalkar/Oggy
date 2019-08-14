@@ -60,8 +60,8 @@ public:
 	bool emplaceVal(ID id, VAL val)
 	{
 		m_valist.push_back(val);
-        auto emplaceRet(m_umap.emplace(std::make_pair(id, std::ref(m_valist.back()))));
-        m_ids.push_back(id);
+	auto emplaceRet(m_umap.emplace(std::make_pair(id, std::ref(m_valist.back()))));
+	m_ids.push_back(id);
 		return emplaceRet.second;
 	}
 
