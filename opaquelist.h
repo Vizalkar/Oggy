@@ -46,12 +46,24 @@ public:
     ID addVal(VAL val)
     {
         ID id(m_nextID);
-        m_valist.push_back(val);
-        m_umap.emplace(std::make_pair(id, std::ref(m_valist.back())));
-        m_ids.push_back(id);
         incrementNextID();
+		assert(emplaceVal(id, val));
         return id;
     }
+
+	/**
+	 * @brief emplaceVal
+	 * @param id
+	 * @param val
+	 * @return true if val has effectively been emplaced, false if there were already a key in the bucket
+	 */
+	bool emplaceVal(ID id, VAL val)
+	{
+		m_valist.push_back(val);
+        auto emplaceRet(m_umap.emplace(std::make_pair(id, std::ref(m_valist.back()))));
+        m_ids.push_back(id);
+		return emplaceRet.second;
+	}
 
     /**
      * @brief removeVal
