@@ -108,6 +108,16 @@ public:
 		else { m_valist.insert(it2, *it1); }
 	    m_valist.erase(it1);
     }
+
+	unsigned int getPositionOfValue(ID seeked){
+		unsigned int pos(0);
+		for (const auto& id : m_ids){
+			if (id == seeked) return pos;
+			++pos;
+		}
+		assert(false && "Seeked ID does not exist");
+		return 0;
+	}
     
     using mconst_iterator = typename std::unordered_map<ID, VAL* const>::const_iterator;
 
