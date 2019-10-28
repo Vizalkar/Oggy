@@ -47,23 +47,23 @@ public:
     {
         ID id(m_nextID);
         incrementNextID();
-		assert(emplaceVal(id, val));
+        assert(emplaceVal(id, val));
         return id;
     }
 
-	/**
-	* @brief emplaceVal
-	* @param id
-	* @param val
-	* @return true if val has effectively been emplaced, false if there were already a key in the bucket
-	*/
-	bool emplaceVal(ID id, VAL val)
-	{
-		m_valist.push_back(val);
-		auto emplaceRet(m_umap.emplace(std::make_pair(id, std::ref(m_valist.back()))));
-		m_ids.push_back(id);
-		return emplaceRet.second;
-	}
+    /**
+    * @brief emplaceVal
+    * @param id
+    * @param val
+    * @return true if val has effectively been emplaced, false if there were already a key in the bucket
+    */
+    bool emplaceVal(ID id, VAL val)
+    {
+        m_valist.push_back(val);
+        auto emplaceRet(m_umap.emplace(std::make_pair(id, std::ref(m_valist.back()))));
+        m_ids.push_back(id);
+        return emplaceRet.second;
+    }
 
     /**
      * @brief removeVal
@@ -97,33 +97,33 @@ public:
      */
     void moveVal(unsigned int pos1, unsigned int pos2)
     {
-	    assert(pos1 < m_valist.size() && pos2 < m_valist.size());
-	    auto it1(m_valist.begin());
-	    auto it2(m_valist.begin());
-	    unsigned int i(0);
-	    for (; it1 != m_valist.end() && i < pos1; ++it1, ++i){}
-	    i = 0;
-	    for (; it2 != m_valist.end() && i < pos2; ++it2, ++i){}
-	    if (pos1 < pos2) { m_valist.insert(++it2, *it1); }
-		else { m_valist.insert(it2, *it1); }
-	    m_valist.erase(it1);
+        assert(pos1 < m_valist.size() && pos2 < m_valist.size());
+        auto it1(m_valist.begin());
+        auto it2(m_valist.begin());
+        unsigned int i(0);
+        for (; it1 != m_valist.end() && i < pos1; ++it1, ++i){}
+        i = 0;
+        for (; it2 != m_valist.end() && i < pos2; ++it2, ++i){}
+        if (pos1 < pos2) { m_valist.insert(++it2, *it1); }
+            else { m_valist.insert(it2, *it1); }
+        m_valist.erase(it1);
     }
 	
-	inline void moveVal(ID id, unsigned int pos)
-	{
-		moveVal(getPositionOfValue(id), pos);
-	}
+    inline void moveValFromID(ID id, unsigned int pos)
+    {
+        moveVal(getPositionOfValue(id), pos);
+    }
 
-	unsigned int getPositionOfValue(ID seeked)
-	{
-		unsigned int pos(0);
-		for (const auto& id : m_ids){
-			if (id == seeked) return pos;
-			++pos;
-		}
-		assert(false && "Seeked ID does not exist");
-		return 0;
-	}
+    unsigned int getPositionOfValue(ID seeked)
+    {
+        unsigned int pos(0);
+        for (const auto& id : m_ids){
+            if (id == seeked) return pos;
+            ++pos;
+        }
+        assert(false && "Seeked ID does not exist");
+        return 0;
+    }
     
     using mconst_iterator = typename std::unordered_map<ID, VAL* const>::const_iterator;
 
