@@ -50,6 +50,13 @@ public:
         assert(emplaceVal(id, val));
         return id;
     }
+	
+    ID addVal(VAL val, unsigned int pos)
+    {
+        auto id(addVal(val));
+        moveVal(id, pos);
+        return id;
+    }
 
     /**
     * @brief emplaceVal
