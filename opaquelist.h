@@ -108,8 +108,14 @@ public:
 		else { m_valist.insert(it2, *it1); }
 	    m_valist.erase(it1);
     }
+	
+	inline void moveVal(ID id, unsigned int pos)
+	{
+		moveVal(getPositionOfValue(id), pos);
+	}
 
-	unsigned int getPositionOfValue(ID seeked){
+	unsigned int getPositionOfValue(ID seeked)
+	{
 		unsigned int pos(0);
 		for (const auto& id : m_ids){
 			if (id == seeked) return pos;
