@@ -9,6 +9,7 @@
 #include <vector>
 #include <functional>
 #include <cassert>
+#include <algorithm>
 
 namespace Oggy
 {
@@ -67,7 +68,7 @@ public:
     bool emplaceVal(ID id, VAL val)
     {
         m_valist.push_back(val);
-        auto emplaceRet(m_umap.emplace(std::make_pair(id, std::ref(m_valist.back()))));
+        auto emplaceRet(m_umap.emplace(std::make_pair(id, &m_valist.back())));
         m_ids.push_back(id);
         return emplaceRet.second;
     }
@@ -80,7 +81,7 @@ public:
      */
     VAL removeVal(ID id)
     {
-        const VAL* valptr = &(m_umap.at(id).get());
+        const VAL* valptr = m_umap.at(id);
         for (auto it(m_ids.begin()); it != m_ids.end(); ++it){
             if (*it == id){
                 m_ids.erase(it);
@@ -105,15 +106,42 @@ public:
     void moveVal(unsigned int pos1, unsigned int pos2)
     {
         assert(pos1 < m_valist.size() && pos2 < m_valist.size());
-        auto it1(m_valist.begin());
-        auto it2(m_valist.begin());
-        unsigned int i(0);
-        for (; it1 != m_valist.end() && i < pos1; ++it1, ++i){}
-        i = 0;
-        for (; it2 != m_valist.end() && i < pos2; ++it2, ++i){}
-        if (pos1 < pos2) { m_valist.insert(++it2, *it1); }
-            else { m_valist.insert(it2, *it1); }
-        m_valist.erase(it1);
+
+        if (pos1 != pos2){
+            auto it1(m_valist.begin());
+            auto it2(m_valist.begin());
+            std::advance(it1, pos1);
+            std::advance(it2, pos2);
+
+            auto itID1(m_ids.begin());
+            std::advance(itID1, std::distance(m_valist.begin(), it1));
+
+            auto itID2(m_ids.begin());
+            std::advance(itID2, std::distance(m_valist.begin(), it2));
+
+            if (pos1 < pos2) {
+                it2 = m_valist.insert(++it2, *it1);
+                itID2 = m_ids.insert(++itID2, *itID1);
+            }
+            else {
+                it2 = m_valist.insert(it2, *it1);
+                itID2 = m_ids.insert(itID2, *itID1);
+            }
+
+            it1 = (m_valist.begin());
+            std::advance(it1, pos1);
+
+            itID1 = (m_ids.begin());
+            std::advance(itID1, std::distance(m_valist.begin(), it1));
+
+            auto id(*itID1);
+            auto valptr(&(*it2));
+
+            m_valist.erase(it1);
+            m_ids.erase(itID1);
+
+            m_umap.at(id) = valptr;
+        }
     }
 	
     inline void moveValFromID(ID id, unsigned int pos)
@@ -137,8 +165,8 @@ public:
     using viterator = typename std::list<VAL>::iterator;
     using vconst_iterator = typename std::list<VAL>::const_iterator;
 
-    inline VAL& at (const ID& id) { return m_umap.at(id).get(); }
-    inline const VAL& at (const ID& id) const { return m_umap.at(id).get(); }
+    inline VAL& at (const ID& id) { return *m_umap.at(id); }
+    inline const VAL& at (const ID& id) const { return *m_umap.at(id); }
     
     inline unsigned int count (const ID& id) const { return m_umap.count(id); }
 
@@ -169,7 +197,7 @@ public:
 
 private:
     ID m_nextID;
-    std::unordered_map<ID, std::reference_wrapper<VAL> const> m_umap;
+    std::unordered_map<ID, VAL*> m_umap;
     std::list<VAL> m_valist;
     std::vector<ID> m_ids;
 };
