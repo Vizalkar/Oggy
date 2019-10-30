@@ -18,7 +18,7 @@ namespace Oggy
  * Add an element, get it's unique ID
  * Access element with ID with unordered_map complexity
  * Browse elements with list complexity
- * 
+ *
  * You cannot put more elements than the ID type allows (obviously)
  */
 template <typename ID, typename VAL>
@@ -35,7 +35,7 @@ public:
      */
     static inline ID nullID()
     {
-    	return ID(0);
+        return ID(0);
     }
 
     /**
@@ -51,7 +51,7 @@ public:
         assert(emplaceVal(id, val));
         return id;
     }
-	
+
     ID addVal(VAL val, unsigned int pos)
     {
         auto id(addVal(val));
@@ -100,7 +100,7 @@ public:
     }
 
     /**
-     * @brief Moves value at position pos1 to position pos2 in the list. 
+     * @brief Moves value at position pos1 to position pos2 in the list.
      * The list can then be iterated in the new order.
      */
     void moveVal(unsigned int pos1, unsigned int pos2)
@@ -129,7 +129,7 @@ public:
             }
 
             it1 = (m_valist.begin());
-            std::advance(it1, pos1);
+            std::advance(it1, pos1 + (pos1>pos2 ? 1 : 0));
 
             itID1 = (m_ids.begin());
             std::advance(itID1, std::distance(m_valist.begin(), it1));
@@ -143,7 +143,7 @@ public:
             m_umap.at(id) = valptr;
         }
     }
-	
+
     inline void moveValFromID(ID id, unsigned int pos)
     {
         moveVal(getPositionOfValue(id), pos);
@@ -159,7 +159,7 @@ public:
         assert(false && "Seeked ID does not exist");
         return 0;
     }
-    
+
     using mconst_iterator = typename std::unordered_map<ID, VAL* const>::const_iterator;
 
     using viterator = typename std::list<VAL>::iterator;
@@ -167,7 +167,7 @@ public:
 
     inline VAL& at (const ID& id) { return *m_umap.at(id); }
     inline const VAL& at (const ID& id) const { return *m_umap.at(id); }
-    
+
     inline unsigned int count (const ID& id) const { return m_umap.count(id); }
 
     inline viterator begin() noexcept { return m_valist.begin(); }
@@ -185,12 +185,12 @@ public:
     inline viterator rend() noexcept { return m_valist.rend(); }
     inline vconst_iterator rend() const noexcept { return m_valist.rend(); }
     inline vconst_iterator crend() const noexcept { return m_valist.crend(); }
-    
+
     template< class Compare >
     inline void sort( Compare comp ) { m_valist.sort(comp); }
-    
+
     inline void sort() { m_valist.sort(); }
-    
+
     inline const std::vector<ID>& getIDVector() const { return m_ids; }
     inline unsigned int size() const { return m_ids.size(); }
     inline bool has(ID id) const { return m_umap.count(id); }
