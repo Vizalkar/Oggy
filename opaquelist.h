@@ -13,6 +13,104 @@
 
 namespace Oggy
 {
+
+template<typename I, typename UNDERLYING_TYPE>
+class ID
+{
+public:
+    friend struct std::hash<ID<I,UNDERLYING_TYPE>>;
+
+    explicit ID(UNDERLYING_TYPE id = 0) : m_id(id) {}
+
+    inline bool operator== (const ID<I,UNDERLYING_TYPE>& rhs) const {
+        return m_id == rhs.m_id;
+    }
+
+    inline bool operator!=(const ID<I,UNDERLYING_TYPE>& rhs) const {
+        return !(*this == rhs);
+    }
+
+    inline bool operator< (const ID<I,UNDERLYING_TYPE>& rhs) const {
+        return m_id < rhs.m_id;
+    }
+
+    inline bool operator> (const ID<I,UNDERLYING_TYPE>& rhs) const {
+        return rhs < *this;
+    }
+
+    inline bool operator<= (const ID<I,UNDERLYING_TYPE>& rhs) const {
+        return !(*this > rhs);
+    }
+
+    inline bool operator>= (const ID<I,UNDERLYING_TYPE>& rhs) const {
+        return !(*this < rhs);
+    }
+
+    inline explicit operator UNDERLYING_TYPE() const {
+        return m_id;
+    }
+
+    inline UNDERLYING_TYPE getUnderlyingValue() const {
+        return m_id;
+    }
+
+    inline ID<I,UNDERLYING_TYPE> operator++() {
+        ++m_id;
+        return *this;
+    }
+
+    inline ID<I,UNDERLYING_TYPE> operator--() {
+        --m_id;
+        return *this;
+    }
+
+    inline ID<I,UNDERLYING_TYPE> operator+( const ID<I,UNDERLYING_TYPE>& rhs) const {
+        return ID<I,UNDERLYING_TYPE>(m_id + rhs.m_id);
+    }
+
+    inline ID<I,UNDERLYING_TYPE> operator-( const ID<I,UNDERLYING_TYPE>& rhs) const {
+        return ID<I,UNDERLYING_TYPE>(m_id - rhs.m_id);
+    }
+
+    inline ID<I,UNDERLYING_TYPE> operator+( const UNDERLYING_TYPE& rhs) const {
+        return ID<I,UNDERLYING_TYPE>(m_id + rhs);
+    }
+
+    inline ID<I,UNDERLYING_TYPE> operator-( const UNDERLYING_TYPE& rhs) const {
+        return ID<I,UNDERLYING_TYPE>(m_id - rhs);
+    }
+
+    inline ID<I,UNDERLYING_TYPE> operator+=( const ID<I,UNDERLYING_TYPE>& rhs) {
+        m_id += rhs.m_id;
+        return *this;
+    }
+
+    inline ID<I,UNDERLYING_TYPE> operator-=( const ID<I,UNDERLYING_TYPE>& rhs) {
+        m_id -= rhs.m_id;
+        return *this;
+    }
+
+    inline bool isNull() const {
+        return m_id == 0;
+    }
+
+    inline operator bool() const{
+        return !isNull();
+    }
+
+private:
+    UNDERLYING_TYPE m_id;
+};
+
+} // OGGY
+
+namespace std{
+    template<typename I, typename UNDERLYING_TYPE>
+    struct hash<Oggy::ID<I,UNDERLYING_TYPE>>;
+}
+
+namespace Oggy {
+
 /**
  * @brief Bread of std::list, butter of std::unordered_map
  * Add an element, get it's unique ID
@@ -217,5 +315,15 @@ void OpaqueList<ID,VAL>::incrementNextID()
 }
 
 } // Oggy
+
+namespace std{
+    template<typename I, typename UNDERLYING_TYPE>
+    struct hash<Oggy::ID<I, UNDERLYING_TYPE>>
+    {
+        std::size_t operator()(const Oggy::ID<I,UNDERLYING_TYPE>& id) const{
+            return std::hash<UNDERLYING_TYPE>{}(id.m_id);
+        }
+    };
+}
 
 #endif //__OPAQUELIST__
