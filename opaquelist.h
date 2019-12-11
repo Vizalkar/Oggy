@@ -263,8 +263,23 @@ public:
     using viterator = typename std::list<VAL>::iterator;
     using vconst_iterator = typename std::list<VAL>::const_iterator;
 
-    inline VAL& at (const ID& id) { return *m_umap.at(id); }
-    inline const VAL& at (const ID& id) const { return *m_umap.at(id); }
+    inline VAL& at (const ID& id) {
+        #ifdef NDEBUG
+        if (m_umap.count(id) == 0) { 
+            assert(false && "ID does not exist in map");
+        }
+        #endif
+        return *m_umap.at(id);
+    }
+    
+    inline const VAL& at (const ID& id) const {
+        #ifdef NDEBUG
+        if (m_umap.count(id) == 0) { 
+            assert(false && "ID does not exist in map");
+        }
+        #endif
+        return *m_umap.at(id); 
+    }
 
     inline unsigned int count (const ID& id) const { return m_umap.count(id); }
 
