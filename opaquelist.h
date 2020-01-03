@@ -264,7 +264,7 @@ public:
     using vconst_iterator = typename std::list<VAL>::const_iterator;
 
     inline VAL& at (const ID& id) {
-        #ifdef NDEBUG
+        #ifndef NDEBUG
         if (m_umap.count(id) == 0) { 
             assert(false && "ID does not exist in map");
         }
@@ -273,7 +273,7 @@ public:
     }
     
     inline const VAL& at (const ID& id) const {
-        #ifdef NDEBUG
+        #ifndef NDEBUG
         if (m_umap.count(id) == 0) { 
             assert(false && "ID does not exist in map");
         }
