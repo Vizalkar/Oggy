@@ -282,6 +282,7 @@ public:
     }
 
     inline unsigned int count (const ID& id) const { return m_umap.count(id); }
+    inline bool empty() const { return m_valist.empty(); }
 
     inline viterator begin() noexcept { return m_valist.begin(); }
     inline vconst_iterator begin() const noexcept { return m_valist.begin(); }
