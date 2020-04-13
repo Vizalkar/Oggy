@@ -324,7 +324,7 @@ void OpaqueList<ID,VAL>::incrementNextID()
     while(candidate != ref){
         if (candidate != nullID() && m_umap.count(candidate) == 0){
             m_nextID = candidate;
-            break;
+            return;
         } else {
             ++candidate;   
         }
