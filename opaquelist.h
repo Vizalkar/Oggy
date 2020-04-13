@@ -321,13 +321,15 @@ void OpaqueList<ID,VAL>::incrementNextID()
 {
     ID ref(m_nextID), candidate(m_nextID);
     ++candidate;
-    while(candidate != ref && candidate != nullID()){
-        if (m_umap.count(candidate) == 0){
+    while(candidate != ref){
+        if (candidate != nullID() && m_umap.count(candidate) == 0){
             m_nextID = candidate;
             break;
+        } else {
+            ++candidate;   
         }
-        ++candidate;
     }
+    assert(false && "Has reached maximum number of objects in collection");
 }
 
 } // Oggy
