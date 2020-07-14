@@ -11,6 +11,18 @@
 #include <cassert>
 #include <algorithm>
 
+#ifndef NDEBUG
+    #ifdef QT_CORE_LIB
+        #include <QtGlobal>
+        #include <QDebug>
+        #define ASSERTMOD(test, str) { Q_ASSERT(test && str); }
+    #else
+        #define ASSERTMOD(test, str) { assert(test && str); }
+    #endif
+#else
+    #define ASSERTMOD(test, str) { test; }
+#endif
+
 namespace Oggy
 {
 
@@ -146,7 +158,7 @@ public:
     {
         ID id(m_nextID);
         incrementNextID();
-        assert(emplaceVal(id, val));
+        ASSERTMOD(emplaceVal(id, val), "A key was replaced");
         return id;
     }
 
@@ -203,7 +215,8 @@ public:
      */
     void moveVal(unsigned int pos1, unsigned int pos2)
     {
-        assert(pos1 < m_valist.size() && pos2 < m_valist.size());
+        pos1 = std::min(pos1, static_cast<unsigned>(m_valist.size())-1u);
+        pos2 = std::min(pos2, static_cast<unsigned>(m_valist.size())-1u);
 
         if (pos1 != pos2){
             auto it1(m_valist.begin());
@@ -254,7 +267,7 @@ public:
             if (id == seeked) return pos;
             ++pos;
         }
-        assert(false && "Seeked ID does not exist");
+        ASSERTMOD(false, "Seeked ID does not exist");
         return 0;
     }
 
@@ -264,20 +277,12 @@ public:
     using vconst_iterator = typename std::list<VAL>::const_iterator;
 
     inline VAL& at (const ID& id) {
-        #ifndef NDEBUG
-        if (m_umap.count(id) == 0) { 
-            assert(false && "ID does not exist in map");
-        }
-        #endif
+        ASSERTMOD(m_umap.count(id) != 0, "ID does not exist in map");
         return *m_umap.at(id);
     }
     
     inline const VAL& at (const ID& id) const {
-        #ifndef NDEBUG
-        if (m_umap.count(id) == 0) { 
-            assert(false && "ID does not exist in map");
-        }
-        #endif
+        ASSERTMOD(m_umap.count(id) != 0, "ID does not exist in map");
         return *m_umap.at(id); 
     }
 
@@ -329,7 +334,7 @@ void OpaqueList<ID,VAL>::incrementNextID()
             ++candidate;   
         }
     }
-    assert(false && "Has reached maximum number of objects in collection");
+    ASSERTMOD(false, "Has reached maximum number of objects in collection");
 }
 
 } // Oggy
