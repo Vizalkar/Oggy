@@ -94,7 +94,7 @@ public:
         return m_id == 0;
     }
 
-    inline operator bool() const{
+    inline explicit operator bool() const{
         return !isNull();
     }
 
