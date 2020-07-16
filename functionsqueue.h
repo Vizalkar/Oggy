@@ -1,6 +1,9 @@
 #include <deque>
 #include <functional>
 
+namespace Oggy
+{
+    
 class FunctionsQueue
 {
 public:
@@ -24,3 +27,5 @@ private:
     std::function<bool()> m_canProcessNextFunction;
     std::deque<std::function<void()>> m_queue;
 };
+    
+}
