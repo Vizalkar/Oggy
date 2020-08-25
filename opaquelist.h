@@ -11,17 +11,13 @@
 #include <cassert>
 #include <algorithm>
 
-#ifndef NDEBUG
-    #ifdef QT_CORE_LIB
-        #include <QtGlobal>
-        #include <QDebug>
-        #define ASSERTMOD(test, str) { Q_ASSERT(test && str); }
-    #else
-        #define ASSERTMOD(test, str) { assert(test && str); }
-    #endif
+#ifdef QT_CORE_LIB
+    #include <QtGlobal>
+    #define ASSERTMOD(test, str) { Q_ASSERT(test && str); }
 #else
     #define ASSERTMOD(test, str) { test; }
 #endif
+
 
 namespace Oggy
 {
@@ -191,6 +187,7 @@ public:
      */
     VAL removeVal(ID id)
     {
+        ASSERTMOD(m_umap.count(id), "Has no such id in map");
         const VAL* valptr = m_umap.at(id);
         for (auto it(m_ids.begin()); it != m_ids.end(); ++it){
             if (*it == id){
