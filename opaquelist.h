@@ -271,7 +271,10 @@ public:
     using mconst_iterator = typename std::unordered_map<ID, VAL* const>::const_iterator;
 
     using viterator = typename std::list<VAL>::iterator;
+    using vriterator = typename std::list<VAL>::reverse_iterator;
+
     using vconst_iterator = typename std::list<VAL>::const_iterator;
+    using vconst_riterator = typename std::list<VAL>::const_reverse_iterator;
 
     inline VAL& at (const ID& id) {
         ASSERTMOD(m_umap.count(id) != 0, "ID does not exist in map");
@@ -294,18 +297,31 @@ public:
     inline vconst_iterator end() const noexcept { return m_valist.end(); }
     inline vconst_iterator cend() const noexcept { return m_valist.cend(); }
 
-    inline viterator rbegin() noexcept { return m_valist.rbegin(); }
-    inline vconst_iterator rbegin() const noexcept { return m_valist.rbegin(); }
-    inline vconst_iterator crbegin() const noexcept { return m_valist.crbegin(); }
+    inline vriterator rbegin() noexcept { return m_valist.rbegin(); }
+    inline vconst_riterator rbegin() const noexcept { return m_valist.rbegin(); }
+    inline vconst_riterator crbegin() const noexcept { return m_valist.crbegin(); }
 
-    inline viterator rend() noexcept { return m_valist.rend(); }
-    inline vconst_iterator rend() const noexcept { return m_valist.rend(); }
-    inline vconst_iterator crend() const noexcept { return m_valist.crend(); }
+    inline vriterator rend() noexcept { return m_valist.rend(); }
+    inline vconst_riterator rend() const noexcept { return m_valist.rend(); }
+    inline vconst_riterator crend() const noexcept { return m_valist.crend(); }
 
-    template< class Compare >
-    inline void sort( Compare comp ) { m_valist.sort(comp); }
+    inline void sort(const std::function<bool(const VAL& val1, const VAL& val2)>& compare) {
+        m_valist.sort(compare);
 
-    inline void sort() { m_valist.sort(); }
+        std::sort(m_ids.begin(), m_ids.end(), [this, compare](const ID& id1, const ID& id2){
+            auto ptr1(m_umap.at(id1));
+            auto it1(std::find_if(m_valist.begin(), m_valist.end(), [ptr1](const VAL& val){ return &val == ptr1; }));
+            auto ptr2(m_umap.at(id2));
+            auto it2(std::find_if(m_valist.begin(), m_valist.end(), [ptr2](const VAL& val){ return &val == ptr2; }));
+            return compare(*it1, *it2);
+        });
+    }
+
+    inline void sort() {
+        sort([](const VAL& val1, const VAL& val2){
+            return val1 < val2;
+        });
+    }
 
     inline const std::vector<ID>& getIDVector() const { return m_ids; }
     inline unsigned int size() const { return m_ids.size(); }
