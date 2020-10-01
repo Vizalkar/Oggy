@@ -11,7 +11,7 @@
 #include <cassert>
 #include <algorithm>
 
-#ifdef QT_CORE_LIB
+#if defined(QT_CORE_LIB) && defined(NDEBUG)
     #include <QtGlobal>
     #define ASSERTMOD(test, str) { Q_ASSERT(test && str); }
 #else
