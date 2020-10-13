@@ -11,7 +11,7 @@
 #include <cassert>
 #include <algorithm>
 
-#if defined(QT_CORE_LIB) && defined(NDEBUG)
+#if defined(QT_CORE_LIB) && !defined(QT_NO_DEBUG)
     #include <QtGlobal>
     #define ASSERTMOD(test, str) { Q_ASSERT(test && str); }
 #else
@@ -176,6 +176,8 @@ public:
         m_valist.push_back(val);
         auto emplaceRet(m_umap.emplace(std::make_pair(id, &m_valist.back())));
         m_ids.push_back(id);
+        if (id == m_nextID) incrementNextID();
+        ASSERTMOD(emplaceRet.second, "Emplace failed, a key with same value already exists in the bucket");
         return emplaceRet.second;
     }
 
