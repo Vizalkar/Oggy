@@ -22,6 +22,10 @@ public:
             if (!m_canProcessNextFunction()) break;
         }
     }
+
+    inline void clear() {
+        m_queue.clear();
+    }
     
 private:
     std::function<bool()> m_canProcessNextFunction;
