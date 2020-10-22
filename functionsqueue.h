@@ -10,6 +10,8 @@ public:
     FunctionsQueue(const std::function<bool()>& canProcessNextFunction) :
         m_canProcessNextFunction(canProcessNextFunction)
     {}
+
+    FunctionsQueue(const FunctionsQueue& other) = delete;
     
     inline void doOrAppend(const std::function<void()>& fun) {
         m_canProcessNextFunction() ? fun() : m_queue.push_back(fun);
@@ -26,6 +28,8 @@ public:
     inline void clear() {
         m_queue.clear();
     }
+
+    inline auto canProcess() const { return m_canProcessNextFunction(); }
     
 private:
     std::function<bool()> m_canProcessNextFunction;
