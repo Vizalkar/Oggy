@@ -1,3 +1,6 @@
+#ifndef FUNCTIONS_QUEUE_H
+#define FUNCTIONS_QUEUE_H
+
 #include <deque>
 #include <functional>
 
@@ -37,3 +40,5 @@ private:
 };
     
 }
+
+#endif
